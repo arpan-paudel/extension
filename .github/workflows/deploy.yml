@@ -14,16 +14,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-
-      - name: Force Commit JSON Changes
+      - name: Setup Git
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git pull origin main
+
+      - name: Authenticate with GitHub
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/arpan-paudel/extension.git
+
+      - name: Commit and Push Changes
+        run: |
           git add data/feedback.json
-          git commit -m "Update feedback data $(date)" || echo "No changes to commit"
-          git push
+          git commit -m "Update feedback data" || echo "No changes to commit"
+          git push origin main
