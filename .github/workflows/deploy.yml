@@ -19,10 +19,11 @@ jobs:
         with:
           node-version: 16
 
-      - name: Deploy to GitHub Pages
+      - name: Force Commit JSON Changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+          git pull origin main
           git add data/feedback.json
-          git commit -m "Update feedback data"
+          git commit -m "Update feedback data $(date)" || echo "No changes to commit"
           git push
