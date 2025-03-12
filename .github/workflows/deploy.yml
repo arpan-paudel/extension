@@ -1,1 +1,28 @@
+name: Deploy Static Site
 
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/feedback.json'  # Trigger only when this file changes
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Deploy to GitHub Pages
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add data/feedback.json
+          git commit -m "Update feedback data"
+          git push
